@@ -1,9 +1,9 @@
-public class Compra {
+public class Compra{
     private static int geraId = 0;
     private int idCompra;
     private Cliente cliente;
     private String funcionarioNom;
-    private Item[] itens;
+    private Item[] itens = new Item[50];
 
     public static Compra getInstance(Cliente cliente, String funcionarioNom, Item[] itens){
         if (cliente != null && funcionarioNom != null && itens != null)
@@ -19,6 +19,9 @@ public class Compra {
         this.itens = itens;
     }
 
+    public Item[] getItens(){
+        return itens;
+    }
     public int getIdCompra() {
         return idCompra;
     }

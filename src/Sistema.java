@@ -9,6 +9,7 @@ public class Sistema {
     private Funcionario logado;
     private static Sistema instance;
     private static Scanner scanner;
+    private String entradaUsu;
 
     public static Sistema getInstance(){
         if (instance == null) 
@@ -82,6 +83,7 @@ public class Sistema {
         System.out.print("Senha: ");
         String senha = scanner.nextLine();
         System.out.println("------------------------------------");
+        this.entradaUsu = nome;
         this.logado = login(nome, senha);
 
         if (this.logado == null){
@@ -164,61 +166,67 @@ public class Sistema {
     }
 
     public void realizarVenda(){
-        Item itens[] = new Item[50];
-        int i = 0;
-        int continuar = 0;
+        List<Item> vetItems = new ArrayList<>();
+        int continuarCompra = 0;
+        int achouMed = 1;
         float valorTotal = 0;
-        String nomeVend = "";
         
         scanner.nextLine(); //Limpar Scanner
         System.out.print("Informe o nome do Cliente: ");
         String nomeCliente = scanner.nextLine();
         Cliente cliente = Cliente.getInstance(nomeCliente);
-        //System.out.println(nomeCliente);
-        //System.out.println(nomeCliente.length());
 
-        while(continuar == 0){
+        while(continuarCompra == 0){
             System.out.print("Informe o nome do Medicamento que deseja comprar: ");
             String nomeMed = scanner.nextLine();
 
             System.out.print("Informe a quantidade que deseja comprar: ");
             int quantMed = scanner.nextInt();
         
-            for(int x = 0; i<vetMedicamentos.size(); x++){
+            for(int x = 0; x<vetMedicamentos.size(); x++){
                 if(vetMedicamentos.get(x).getNome().equals(nomeMed)){
                     valorTotal = quantMed * vetMedicamentos.get(x).getValorAtual();
+                    achouMed = 0;
                     break;
                 }   
             }
 
-            itens[i] = Item.getInstance(nomeMed, valorTotal, quantMed);
-            i++;
+            if(achouMed == 0){
+                Item itens = Item.getInstance(nomeMed, valorTotal, quantMed);
+                vetItems.add(itens);
+                //System.out.println("Item adicionado");
+                achouMed = 1;
+            }else{
+                System.out.println("Medicamento não encontrado");
+            }
             
-            System.out.println("Parar de comprar sim (digite 1) ou não (digite 0)");
+            
+            System.out.print("Parar de comprar sim (digite 1) ou não (digite 0): ");
             int informe = scanner.nextInt();
-            if(informe == 1){
-                continuar = 1;
-            }
-        }
-        int sairLoop = 0;
-
-        while(sairLoop == 0){
-            System.out.print("Informe o nome do vendedor: ");
             scanner.nextLine();
-            nomeVend = scanner.nextLine();
-            for (int x = 0; x < vetFuncionarios.size(); x++) {
-                if (vetFuncionarios.get(x).nome.equals(nomeVend)) {
-                    sairLoop = 1;
-                    break;
-                }
+            if(informe == 1){
+                continuarCompra = 1;
             }
-            if (sairLoop == 0) {
-                System.out.println("Vendedor não encontrado");
-            }   
         }
 
-        Compra compras = Compra.getInstance(cliente, nomeVend, itens);
+        Compra compras = Compra.getInstance(cliente, entradaUsu, vetItems.toArray(new Item[0]));
         vetCompras.add(compras);
+
+        //FIZ ESSA PARTE PQ EU TAVA VENDO COMO A GENTE ACESSARIA AS COISAS DO VETOR DE COMPRA, DPS EXCLUO
+        /*for(int x = 0; x<vetCompras.size(); x++){
+            System.out.println(vetCompras.get(x).getFuncionarioNom() + vetCompras.get(x).getIdCompra() + vetCompras.get(x).getCliente().nome);
+        }
+
+        Item[] itens = vetCompras.get(0).getItens();
+        // Iterando sobre o array de itens
+        for (Item item : itens) {
+            if (item != null) { // Verifica se o item não é null
+                System.out.println("Nome do Medicamento: " + item.getMedicamentoNom());
+                System.out.println("Quantidade: " + item.getQuantidade());
+                System.out.println("Valor Pago: " + item.getValorPago());
+            }
+        }*/
+
         System.out.println("Venda Realizada com Sucesso");
         menuVendedor();
     }

@@ -9,9 +9,21 @@ public class Item {
         return null;
     }
 
-    public Item(String medicamentoNom, float ValorPago, int quantidade){
+    public Item(String medicamentoNom, float valorPago, int quantidade){
         this.medicamentoNom = medicamentoNom;
         this.valorPago = valorPago;
         this.quantidade = quantidade;
+    }
+
+    public String getMedicamentoNom(){
+        return medicamentoNom;
+    }
+
+    public float getValorPago(){
+        return valorPago;
+    }
+
+    public int getQuantidade(){
+        return quantidade;
     }
 }
