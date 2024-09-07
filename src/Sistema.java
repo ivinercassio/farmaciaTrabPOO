@@ -25,10 +25,12 @@ public class Sistema {
     }
 
     public void init(){
-        // INICIALIZAR COM 2 FUNCIONARIOS
+        // INICIALIZAR COM 3 FUNCIONARIOS
         Funcionario func = Gerente.getInstance("Marcos", 1500, "15/05/2020", "123");
         vetFuncionarios.add(func);
         func = Vendedor.getInstance("Joana", 1100, "10/09/2022", "123");
+        vetFuncionarios.add(func);
+        func = Vendedor.getInstance("Getulio", 1100, "08/12/2015", "123");
         vetFuncionarios.add(func);
 
         // INICIALIZAR COM 5 MEDICAMENTOS
@@ -43,6 +45,27 @@ public class Sistema {
         med = Medicamento.getInstance("Cimegripe", 22.15f);
         vetMedicamentos.add(med);
 
+        //INICIALIZAR COM 2 VENDAS
+        List<Item> vetItems = new ArrayList<>();
+        Item itens = Item.getInstance("Neosaldina", vetMedicamentos.get(0).getValorAtual()*130, 130);
+        vetItems.add(itens);
+        itens = Item.getInstance("Dipirona", vetMedicamentos.get(3).getValorAtual()*50, 50);
+        vetItems.add(itens);
+        Cliente clientNome = Cliente.getInstance("Paulo");
+        Compra compras = Compra.getInstance(clientNome, "Joana", vetItems.toArray(new Item[0]));
+        vetCompras.add(compras);
+
+        vetItems = new ArrayList<>();
+        itens = Item.getInstance("Glifage", vetMedicamentos.get(2).getValorAtual()*99, 99);
+        vetItems.add(itens);
+        itens = Item.getInstance("Neosoro", vetMedicamentos.get(1).getValorAtual()*10, 10);
+        vetItems.add(itens);
+        itens = Item.getInstance("Cimegripe", vetMedicamentos.get(4).getValorAtual()*60, 60);
+        vetItems.add(itens);
+        clientNome = Cliente.getInstance("Mathias");
+        compras = Compra.getInstance(clientNome, "Getulio", vetItems.toArray(new Item[0]));
+        vetCompras.add(compras);
+
         imprimeVetor();
     }
 
@@ -56,6 +79,22 @@ public class Sistema {
         for (int i = 0; i < vetMedicamentos.size(); i++) 
             System.out.println("COD: " + vetMedicamentos.get(i).getIdMedicamento() + " - NOME: " + vetMedicamentos.get(i).getNome());
         System.out.println();
+        
+        System.out.println("VENDAS");
+        for (int i = 0; i < vetCompras.size(); i++){
+            System.out.println("Vendedor: "+vetCompras.get(i).getFuncionarioNom());
+            System.out.println("Id: "+vetCompras.get(i).getIdCompra());
+            System.out.println("Nome do Cliente: "+vetCompras.get(i).getCliente().nome);
+    
+            Item[] itens = vetCompras.get(vetCompras.get(i).getIdCompra()-1).getItens();
+            for (Item item : itens) {
+                if (item != null) {
+                    System.out.println("Nome do Medicamento: " + item.getMedicamentoNom());
+                    System.out.println("Quantidade: " + item.getQuantidade());
+                    System.out.println("Valor Pago: " + item.getValorPago());
+                    }
+                }
+        }
     }
 
     public void menuPrincipal(){
@@ -225,7 +264,7 @@ public class Sistema {
         }
 
         for(int x = 0; x<vetCompras.size(); x++){
-            if(vetCompras.get(x).getFuncionarioNom().equals(entradaUsu) || vetCompras.get(x).getFuncionarioNom().equals(nomVendedor))
+            if(vetCompras.get(x).getFuncionarioNom().equals(entradaUsu) || vetCompras.get(x).getFuncionarioNom().equals(nomVendedor)){
                 System.out.println("----------------------------------------");
                 System.out.println("Id: "+vetCompras.get(x).getIdCompra());
                 System.out.println("Nome do Cliente: "+vetCompras.get(x).getCliente().nome);
@@ -239,6 +278,7 @@ public class Sistema {
                     }
                 }
                 System.out.println("----------------------------------------");
+            }
         }
     }
 
