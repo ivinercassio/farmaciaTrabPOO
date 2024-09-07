@@ -154,7 +154,7 @@ public class Sistema {
                 realizarVenda();
                 break;
             case 2:
-                //historicoVendas();
+                historicoVendas();
                 break;
             case 3:
                 realizarLogin();
@@ -229,6 +229,27 @@ public class Sistema {
 
         System.out.println("Venda Realizada com Sucesso");
         menuVendedor();
+    }
+
+    public void historicoVendas(){
+        System.out.println("Histórico de vendas do funcionário/a "+ entradaUsu);
+
+        for(int x = 0; x<vetCompras.size(); x++){
+            if(vetCompras.get(x).getFuncionarioNom().equals(entradaUsu))
+                System.out.println("----------------------------------------");
+                System.out.println("Id: "+vetCompras.get(x).getIdCompra());
+                System.out.println("Nome do Cliente: "+vetCompras.get(x).getCliente().nome);
+
+                Item[] itens = vetCompras.get(vetCompras.get(x).getIdCompra()-1).getItens();
+                for (Item item : itens) {
+                    if (item != null) {
+                        System.out.println("Nome do Medicamento: " + item.getMedicamentoNom());
+                        System.out.println("Quantidade: " + item.getQuantidade());
+                        System.out.println("Valor Pago: " + item.getValorPago());
+                    }
+                }
+                System.out.println("----------------------------------------");
+        }
     }
 
     public void gerenciarMedicamento(){
