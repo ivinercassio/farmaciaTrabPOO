@@ -125,7 +125,7 @@ public class Sistema {
                 // gerenciarFuncionario();
                 break;
             case 3:
-                // gerenciarCompra();  
+                gerenciarCompra();  
                 break;
             case 4:
                 realizarLogin();
@@ -154,7 +154,8 @@ public class Sistema {
                 realizarVenda();
                 break;
             case 2:
-                historicoVendas();
+                String semNom = "";
+                historicoVendas(semNom);
                 break;
             case 3:
                 realizarLogin();
@@ -212,30 +213,19 @@ public class Sistema {
         Compra compras = Compra.getInstance(cliente, entradaUsu, vetItems.toArray(new Item[0]));
         vetCompras.add(compras);
 
-        //FIZ ESSA PARTE PQ EU TAVA VENDO COMO A GENTE ACESSARIA AS COISAS DO VETOR DE COMPRA, DPS EXCLUO
-        /*for(int x = 0; x<vetCompras.size(); x++){
-            System.out.println(vetCompras.get(x).getFuncionarioNom() + vetCompras.get(x).getIdCompra() + vetCompras.get(x).getCliente().nome);
-        }
-
-        Item[] itens = vetCompras.get(0).getItens();
-        // Iterando sobre o array de itens
-        for (Item item : itens) {
-            if (item != null) { // Verifica se o item não é null
-                System.out.println("Nome do Medicamento: " + item.getMedicamentoNom());
-                System.out.println("Quantidade: " + item.getQuantidade());
-                System.out.println("Valor Pago: " + item.getValorPago());
-            }
-        }*/
-
         System.out.println("Venda Realizada com Sucesso");
         menuVendedor();
     }
 
-    public void historicoVendas(){
-        System.out.println("Histórico de vendas do funcionário/a "+ entradaUsu);
+    public void historicoVendas(String nomVendedor){
+        if(nomVendedor.equals("")){
+            System.out.println("Histórico de vendas do/a funcionário/a "+ entradaUsu);    
+        }else{
+            System.out.println("Histórico de vendas do/a funcionário/a "+ nomVendedor);
+        }
 
         for(int x = 0; x<vetCompras.size(); x++){
-            if(vetCompras.get(x).getFuncionarioNom().equals(entradaUsu))
+            if(vetCompras.get(x).getFuncionarioNom().equals(entradaUsu) || vetCompras.get(x).getFuncionarioNom().equals(nomVendedor))
                 System.out.println("----------------------------------------");
                 System.out.println("Id: "+vetCompras.get(x).getIdCompra());
                 System.out.println("Nome do Cliente: "+vetCompras.get(x).getCliente().nome);
@@ -249,6 +239,89 @@ public class Sistema {
                     }
                 }
                 System.out.println("----------------------------------------");
+        }
+    }
+
+    public void gerenciarCompra(){
+        int escolha;
+        do {
+            System.out.println("\n---------- MENU GERENTE VENDAS ---------");
+            System.out.println("1 - Ver todas as vendas realizadas");
+            System.out.println("2 - Ver todas as vendas de um vendedor");
+            System.out.println("3 - Ver uma venda pelo id");
+            System.out.println("4 - Sair");
+            System.out.println("---------------------------------");
+            System.out.print("Opção desejada: ");
+            escolha = scanner.nextInt();
+            scanner.nextLine();
+        } while (escolha < 1 || escolha > 4);
+        switch (escolha) {
+            case 1:
+                for(int x = 0; x<vetCompras.size(); x++){
+                    System.out.println("----------------------------------------");
+                    System.out.println("Vendedor: "+vetCompras.get(x).getFuncionarioNom());
+                    System.out.println("Id: "+vetCompras.get(x).getIdCompra());
+                    System.out.println("Nome do Cliente: "+vetCompras.get(x).getCliente().nome);
+    
+                    Item[] itens = vetCompras.get(vetCompras.get(x).getIdCompra()-1).getItens();
+                    for (Item item : itens) {
+                        if (item != null) {
+                            System.out.println("Nome do Medicamento: " + item.getMedicamentoNom());
+                            System.out.println("Quantidade: " + item.getQuantidade());
+                            System.out.println("Valor Pago: " + item.getValorPago());
+                        }
+                    }
+                    System.out.println("----------------------------------------");
+                }
+                gerenciarCompra();
+                break;
+            case 2:
+                int achaVendedor = 0;
+                System.out.print("Informe o nome do vendedor que deseja ver as vendas: ");
+                String vendedorNom = scanner.nextLine();
+                for (int i = 0; i < vetFuncionarios.size(); i++){
+                    if(vetFuncionarios.get(i).nome.equalsIgnoreCase(vendedorNom)){
+                        achaVendedor = 1;
+                        historicoVendas(vendedorNom);   
+                    }
+                }
+                if(achaVendedor == 0){
+                    System.out.println("Vendedor não encontrado");
+                }
+                gerenciarCompra();
+                break;
+            case 3:
+                int acharId = 0;
+                System.out.print("Informe o id da venda que deseja ver: ");
+                int verId = scanner.nextInt();
+                scanner.nextLine();
+                for(int x = 0; x<vetCompras.size(); x++){
+                    if(vetCompras.get(x).getIdCompra() == verId){
+                        acharId = 1;
+                        System.out.println("----------------------------------------");
+                        System.out.println("Id: "+vetCompras.get(x).getIdCompra());
+                        System.out.println("Vendedor: "+vetCompras.get(x).getFuncionarioNom());
+                        System.out.println("Nome do Cliente: "+vetCompras.get(x).getCliente().nome);
+        
+                        Item[] itens = vetCompras.get(vetCompras.get(x).getIdCompra()-1).getItens();
+                        for (Item item : itens) {
+                            if (item != null) {
+                                System.out.println("Nome do Medicamento: " + item.getMedicamentoNom());
+                                System.out.println("Quantidade: " + item.getQuantidade());
+                                System.out.println("Valor Pago: " + item.getValorPago());
+                            }
+                        }
+                        System.out.println("----------------------------------------");
+                    }
+                }
+                if(acharId == 0){
+                    System.out.println("Id não localizado");
+                }
+                gerenciarCompra();
+                break;
+            default:
+                menuGerente();
+                break;
         }
     }
 
