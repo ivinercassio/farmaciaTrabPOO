@@ -134,7 +134,6 @@ public class Sistema {
         }else if (this.logado instanceof Gerente)
             menuGerente();
         else if(this.logado instanceof Vendedor)
-            System.out.println("sou vendedor!");
             menuVendedor();
     }
 
@@ -292,7 +291,7 @@ public class Sistema {
             System.out.println("1 - Ver todas as vendas realizadas");
             System.out.println("2 - Ver todas as vendas de um vendedor");
             System.out.println("3 - Ver uma venda pelo id");
-            System.out.println("4 - Sair");
+            System.out.println("4 - Voltar");
             System.out.println("---------------------------------");
             System.out.print("Opção desejada: ");
             escolha = scanner.nextInt();
@@ -409,16 +408,17 @@ public class Sistema {
                 // editar 
                 System.out.print("\nID do Medicamento: ");
                 int idMedicamento = scanner.nextInt();
-                med = vetMedicamentos.get(idMedicamento-1);
+                med = buscarMedicamentoPorId(idMedicamento);
                 menuEditarMedicamento(med);
                 gerenciarMedicamento();
                 break;
             case 3:
-                // deletar // EXCLUIR 2 VEZES DAH ERRO!! PROBLEMA COM O ID 
+                // deletar
                 System.out.print("\nID do Medicamento: ");
                 idMedicamento = scanner.nextInt();
-                if (vetMedicamentos.get(idMedicamento-1) != null){ 
-                    vetMedicamentos.remove(idMedicamento-1);
+                if (buscarMedicamentoPorId(idMedicamento) != null){ 
+                    int index = vetMedicamentos.indexOf(buscarMedicamentoPorId(idMedicamento));
+                    vetMedicamentos.remove(index);
                     System.out.println("\nDeletado com sucesso!!");
                 }else 
                     System.out.println("\nErro ao deletar!");
@@ -428,7 +428,7 @@ public class Sistema {
                 // listar por id 
                 System.out.print("\nID do Medicamento: ");
                 idMedicamento = scanner.nextInt();
-                med = vetMedicamentos.get(idMedicamento-1);
+                med = buscarMedicamentoPorId(idMedicamento);
                 if (med != null) 
                     System.out.println("ID: " + med.getIdMedicamento() + " - NOME: " + med.getNome());
                 else 
@@ -534,7 +534,7 @@ public class Sistema {
                 // editar
                 System.out.print("\nID do Funcionário: ");
                 int idFuncionario = scanner.nextInt();
-                Funcionario funcionario = vetFuncionarios.get(idFuncionario-1);
+                Funcionario funcionario = buscarFuncionarioPorId(idFuncionario);
                 menuEditarFuncionario(funcionario);
                 break;
             case 3:
@@ -631,13 +631,6 @@ public class Sistema {
         for (int i = 0; i < vetFuncionarios.size(); i++) 
             if (vetFuncionarios.get(i).getIdPessoa() == id)
                 return vetFuncionarios.get(i);
-        return null;
-    }
-
-    private Compra buscarCompraPorId(int id){
-        for (int i = 0; i < vetCompras.size(); i++) 
-            if (vetCompras.get(i).getIdCompra() == id)
-                return vetCompras.get(i);
         return null;
     }
 
