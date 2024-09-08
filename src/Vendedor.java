@@ -1,12 +1,12 @@
 public class Vendedor extends Funcionario{
 
-    public static Vendedor getInstance(String nome, float salario, String dtAdmissao, String senha){
-        if (nome.length()>2 && dtAdmissao != null && senha != null && senha != "") 
-            return new Vendedor(nome, salario, dtAdmissao, senha);
+    public static Vendedor getInstance(String nome, float salario, String senha){
+        if (nome.length()>2 && senha != null && senha != "") 
+            return new Vendedor(nome, salario, senha);
         return null;
     }
 
-    private Vendedor(String nome, float salario, String dtAdmissao, String senha){
-        super(nome, salario, dtAdmissao, senha);
+    private Vendedor(String nome, float salario, String senha){
+        super(nome, salario, senha);
     }
 }

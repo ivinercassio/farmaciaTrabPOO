@@ -37,8 +37,16 @@ public abstract class Pessoa {
         }
     }
 
-    public void setNome(String nome) {
+    protected void setNome(String nome) {
         if (nome != null && nome != "")
             this.nome = nome;
+    }
+
+    protected int getIdPessoa() {
+        return idPessoa;
+    }
+
+    protected String getNome() {
+        return nome;
     }
 }

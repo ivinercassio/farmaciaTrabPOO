@@ -8,19 +8,14 @@ public abstract class Funcionario extends Pessoa {
     protected Date dtDemissao;
     protected String senha;
 
-    protected Funcionario(String nome, float salario, String dtAdmissao, String senha) {
+    protected Funcionario(String nome, float salario, String senha) {
         super(nome);
-        SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
         this.salario = salario;
-        try {
-            this.dtAdmissao = dateFormat.parse(dtAdmissao);
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
+        this.dtAdmissao = new Date();
         this.senha = senha;
     }
 
-    public void setDtDemissao(String dtDemissao) {
+    protected void setDtDemissao(String dtDemissao) {
         SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
         try {
             Date date = dateFormat.parse(dtDemissao);
@@ -31,11 +26,20 @@ public abstract class Funcionario extends Pessoa {
         }
     }
 
-    public String getSenha() {
+    protected void setDtAdmissao(String dtAdmissao) {
+        SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+        try {
+            this.dtAdmissao = dateFormat.parse(dtAdmissao);    
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    protected String getSenha() {
         return senha;
     }    
 
-    public void setSalario(float salario) {
+    protected void setSalario(float salario) {
         if (salario > 0)
             this.salario = salario;
     }

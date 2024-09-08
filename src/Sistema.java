@@ -26,11 +26,14 @@ public class Sistema {
 
     public void init(){
         // INICIALIZAR COM 3 FUNCIONARIOS
-        Funcionario func = Gerente.getInstance("Marcos", 1500, "15/05/2020", "123");
+        Funcionario func = Gerente.getInstance("Marcos", 1500, "123");
+        func.setDtAdmissao("15/05/2020");
         vetFuncionarios.add(func);
-        func = Vendedor.getInstance("Joana", 1100, "10/09/2022", "123");
+        func = Vendedor.getInstance("Joana", 1100, "123");
+        func.setDtAdmissao("10/09/2022");
         vetFuncionarios.add(func);
-        func = Vendedor.getInstance("Getulio", 1100, "08/12/2015", "123");
+        func = Vendedor.getInstance("Getulio", 1100, "123");
+        func.setDtAdmissao("08/12/2015");
         vetFuncionarios.add(func);
 
         // INICIALIZAR COM 5 MEDICAMENTOS
@@ -161,7 +164,7 @@ public class Sistema {
                 gerenciarMedicamento();
                 break;
             case 2:
-                // gerenciarFuncionario();
+                gerenciarFuncionario();
                 break;
             case 3:
                 gerenciarCompra();  
@@ -507,34 +510,20 @@ public class Sistema {
             case 1:
             // cadastrar
                 scanner.nextLine(); // limpar scanner
-                System.out.println("Cargo: ");
+                System.out.print("\nCargo: ");
                 String cargo = scanner.next();
-                System.out.print("\nNome: ");
-                String nome = scanner.nextLine();
+                System.out.print("Nome: ");
+                String nome = scanner.next();
                 System.out.print("Salário: R$");
                 float salario = scanner.nextFloat();
                 scanner.nextLine(); // limpar scanner
-                System.out.println("Data Admissão: (formato: dd/MM/yyyy)");
-                String dtAdmissao = scanner.next();
                 System.out.print("Senha: ");
                 String senha = scanner.next();
                 Funcionario func = null;
                 if (cargo.equals("Gerente"))
-                    func = Gerente.getInstance(nome, salario, dtAdmissao, senha);
+                    func = Gerente.getInstance(nome, salario, senha);
                 else if (cargo.equals("Vendedor"))
-                    func = Vendedor.getInstance(nome, salario, dtAdmissao, senha);
-                System.out.println("Data Demissão: (formato: dd/MM/yyyy)");
-                String dtDemissao = scanner.next();
-                System.out.print("CPF: ");
-                String cpf = scanner.next();
-                System.out.print("Cidade: ");
-                String cidade = scanner.next();
-                System.out.println("Data Nascimento: (formato: dd/MM/yyyy)");
-                String dtNasc = scanner.next();
-                func.setDtDemissao(dtDemissao);
-                func.setCpf(cpf);
-                func.setCidade(cidade);
-                func.setDtNasc(dtNasc);
+                    func = Vendedor.getInstance(nome, salario, senha);
                 if (vetFuncionarios.add(func))
                     System.out.println("\nCadastrado com sucesso!!");
                 else 
@@ -549,13 +538,37 @@ public class Sistema {
                 menuEditarFuncionario(funcionario);
                 break;
             case 3:
-                
+                // deletar
+                System.out.print("\nID do Funcionário: ");
+                idFuncionario = scanner.nextInt();
+                if (buscarFuncionarioPorId(idFuncionario) != null){ 
+                    int index = vetFuncionarios.indexOf(buscarFuncionarioPorId(idFuncionario));
+                    vetFuncionarios.remove(index);
+                    System.out.println("\nDeletado com sucesso!!");
+                }else 
+                    System.out.println("\nErro ao deletar!");
+                gerenciarFuncionario();
                 break;
             case 4:
-                
+                // listar por id
+                System.out.print("\nID do Funcionário: ");
+                idFuncionario = scanner.nextInt();
+                func = buscarFuncionarioPorId(idFuncionario);
+                if (func != null) 
+                    System.out.println("ID: " + func.getIdPessoa() + " - NOME: " + func.getNome());
+                else 
+                    System.out.println("\nFuncionário não encontrado!");
+                gerenciarFuncionario();
                 break;
             case 5:
-                
+                // listar todos
+                if (!vetFuncionarios.isEmpty()) {
+                    System.out.println("\nFUNCIONÁRIOS");
+                    for (int i = 0; i < vetFuncionarios.size(); i++)
+                    System.out.println("ID: " + vetFuncionarios.get(i).getIdPessoa() + " - NOME: " + vetFuncionarios.get(i).getNome());
+                }else 
+                    System.out.println("Não há funcionários cadastrados!");
+                gerenciarFuncionario();
                 break;        
             default:
                 // voltar 
@@ -614,4 +627,24 @@ public class Sistema {
         gerenciarFuncionario();
     }
 
+    private Funcionario buscarFuncionarioPorId(int id){
+        for (int i = 0; i < vetFuncionarios.size(); i++) 
+            if (vetFuncionarios.get(i).getIdPessoa() == id)
+                return vetFuncionarios.get(i);
+        return null;
+    }
+
+    private Compra buscarCompraPorId(int id){
+        for (int i = 0; i < vetCompras.size(); i++) 
+            if (vetCompras.get(i).getIdCompra() == id)
+                return vetCompras.get(i);
+        return null;
+    }
+
+    private Medicamento buscarMedicamentoPorId(int id){
+        for (int i = 0; i < vetMedicamentos.size(); i++) 
+            if (vetMedicamentos.get(i).getIdMedicamento() == id)
+                return vetMedicamentos.get(i);
+        return null;
+    }
 }
