@@ -4,7 +4,7 @@ public class Medicamento {
     private String nome;
     private float valorAtual;
     private String restricao;
-    private String efeitosColaterias;
+    private String efeitosColaterais;
 
     public static Medicamento getInstance(String nome, float valorAtual){
         if (nome != null && nome != "" && valorAtual > 0) 
@@ -48,6 +48,14 @@ public class Medicamento {
 
     public void setEfeitosColaterais(String efeitos) {
         if (efeitos != null && efeitos.length() > 3)
-            this.efeitosColaterias = efeitos;
+            this.efeitosColaterais = efeitos;
+    }
+
+    public String getEfeitosColaterais() {
+        return efeitosColaterais;
+    }
+
+    public String getRestricao() {
+        return restricao;
     }
 }

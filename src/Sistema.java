@@ -68,36 +68,6 @@ public class Sistema {
         clientNome = Cliente.getInstance("Mathias");
         compras = Compra.getInstance(clientNome, "Getulio", vetItems.toArray(new Item[0]));
         vetCompras.add(compras);
-
-        imprimeVetor();
-    }
-
-    // APAGAR ESSA FUNÇÃO DEPOIS
-    private void imprimeVetor(){
-        System.out.println("FUNCIONARIOS");
-        for (int i = 0; i < vetFuncionarios.size(); i++) 
-            System.out.println("COD: " + vetFuncionarios.get(i).idPessoa + " - NOME: " + vetFuncionarios.get(i).nome);
-        
-        System.out.println("MEDICAMENTOS");
-        for (int i = 0; i < vetMedicamentos.size(); i++) 
-            System.out.println("COD: " + vetMedicamentos.get(i).getIdMedicamento() + " - NOME: " + vetMedicamentos.get(i).getNome());
-        System.out.println();
-        
-        System.out.println("VENDAS");
-        for (int i = 0; i < vetCompras.size(); i++){
-            System.out.println("Vendedor: "+vetCompras.get(i).getFuncionarioNom());
-            System.out.println("Id: "+vetCompras.get(i).getIdCompra());
-            System.out.println("Nome do Cliente: "+vetCompras.get(i).getCliente().nome);
-    
-            Item[] itens = vetCompras.get(vetCompras.get(i).getIdCompra()-1).getItens();
-            for (Item item : itens) {
-                if (item != null) {
-                    System.out.println("Nome do Medicamento: " + item.getMedicamentoNom());
-                    System.out.println("Quantidade: " + item.getQuantidade());
-                    System.out.println("Valor Pago: " + item.getValorPago());
-                    }
-                }
-        }
     }
 
     public void menuPrincipal(){
@@ -241,8 +211,7 @@ public class Sistema {
             }else{
                 System.out.println("Medicamento não encontrado");
             }
-            
-            
+                        
             System.out.print("Parar de comprar sim (digite 1) ou não (digite 0): ");
             int informe = scanner.nextInt();
             scanner.nextLine();
@@ -408,7 +377,7 @@ public class Sistema {
                 // editar 
                 System.out.print("\nID do Medicamento: ");
                 int idMedicamento = scanner.nextInt();
-                med = buscarMedicamentoPorId(idMedicamento);
+                med = buscarMedicamentoPorId(idMedicamento);                    
                 menuEditarMedicamento(med);
                 gerenciarMedicamento();
                 break;
@@ -430,7 +399,7 @@ public class Sistema {
                 idMedicamento = scanner.nextInt();
                 med = buscarMedicamentoPorId(idMedicamento);
                 if (med != null) 
-                    System.out.println("ID: " + med.getIdMedicamento() + " - NOME: " + med.getNome());
+                    System.out.println("ID: " + med.getIdMedicamento() + " - NOME: " + med.getNome() + " - VALOR: " + med.getValorAtual() + " - RESTRIÇÃO: " + med.getRestricao() + " - EFEITOS COLATERAIS: " + med.getEfeitosColaterais());
                 else 
                     System.out.println("\nMedicamento não encontrado!");
                 gerenciarMedicamento();
@@ -440,7 +409,7 @@ public class Sistema {
                 if (!vetMedicamentos.isEmpty()) {
                     System.out.println("\nMEDICAMENTOS");
                     for (int i = 0; i < vetMedicamentos.size(); i++)
-                    System.out.println("ID: " + vetMedicamentos.get(i).getIdMedicamento() + " - NOME: " + vetMedicamentos.get(i).getNome());
+                    System.out.println("ID: " + vetMedicamentos.get(i).getIdMedicamento() + " - NOME: " + vetMedicamentos.get(i).getNome() + " - VALOR: " + vetMedicamentos.get(i).getValorAtual());
                 }else 
                     System.out.println("Não há medicamentos cadastrados!");
                 gerenciarMedicamento();
@@ -453,6 +422,7 @@ public class Sistema {
     }
 
     private void menuEditarMedicamento(Medicamento med){
+        System.out.println("ID: " + med.getIdMedicamento() + " - NOME: " + med.getNome() + " - VALOR: " + med.getValorAtual() + " - RESTRIÇÃO: " + med.getRestricao() + " - EFEITOS COLATERAIS: " + med.getEfeitosColaterais());
         int escolha;
         do {
             System.out.println("\n---------- EDITAR MEDICAMENTO ---------");
@@ -460,10 +430,11 @@ public class Sistema {
             System.out.println("2 - Editar Valor");
             System.out.println("3 - Editar Restrições");
             System.out.println("4 - Editar Efeitos Colaterais");
+            System.out.println("5 - Voltar");
             System.out.println("-----------------------------------------");
             System.out.print("Opção desejada: ");
             escolha = scanner.nextInt();
-        } while (escolha < 1 || escolha > 4);
+        } while (escolha < 1 || escolha > 5);
 
         switch (escolha) {
             case 1:
@@ -474,19 +445,23 @@ public class Sistema {
                 break;
             case 2:
                 System.out.print("\nNovo valor: R$");
-                scanner.nextLine(); // limpar scanner
                 Float valor = scanner.nextFloat();
                 med.setValorAtual(valor);
                 break;
             case 3:
                 System.out.println("\nNovas restrições: ");
+                scanner.nextLine(); // limpar scanner
                 String restricao = scanner.nextLine();
                 med.setRestricao(restricao);
                 break;        
-            default:
+            case 4: 
                 System.out.println("\nNovos efeitos colaterais: ");
+                scanner.nextLine(); // limpar scanner
                 String efeito = scanner.nextLine();
                 med.setEfeitosColaterais(efeito);
+                break;
+            default:
+                gerenciarMedicamento();
                 break;
         }
     }
@@ -555,7 +530,7 @@ public class Sistema {
                 idFuncionario = scanner.nextInt();
                 func = buscarFuncionarioPorId(idFuncionario);
                 if (func != null) 
-                    System.out.println("ID: " + func.getIdPessoa() + " - NOME: " + func.getNome());
+                    System.out.println("ID: " + func.getIdPessoa() + " - NOME: " + func.getNome() + " - SALÁRIO: R$" + func.getSalario() + " - ADMISSÃO: " + func.getDtAdmissao() + " - DEMISSÃO: " + func.getDtDemissao());
                 else 
                     System.out.println("\nFuncionário não encontrado!");
                 gerenciarFuncionario();
@@ -578,9 +553,10 @@ public class Sistema {
     }
 
     private void menuEditarFuncionario(Funcionario func){
+        System.out.println("ID: " + func.getIdPessoa() + " - NOME: " + func.getNome() + " - SALÁRIO: R$" + func.getSalario() + " - ADMISSÃO: " + func.getDtAdmissao() + " - DEMISSÃO: " + func.getDtDemissao());
         int escolha;
         do {
-            System.out.println("\n---------- MENU FUNCIONÁRIO ---------");
+            System.out.println("\n---------- EDITAR FUNCIONÁRIO ---------");
             System.out.println("1 - Editar Nome");
             System.out.println("2 - Editar CPF");
             System.out.println("3 - Editar Cidade");
@@ -589,10 +565,11 @@ public class Sistema {
             System.out.println("6 - Editar Data Admissão");
             System.out.println("7 - Editar Data Demissão");
             System.out.println("8 - Editar Senha");
+            System.out.println("9 - Voltar");
             System.out.println("--------------------------------------");
             System.out.print("Opção desejada: ");
             escolha = scanner.nextInt();
-        } while (escolha < 1 || escolha > 8);
+        } while (escolha < 1 || escolha > 9);
 
         switch (escolha) {
             case 1:
@@ -621,8 +598,21 @@ public class Sistema {
                 Float salario = scanner.nextFloat();
                 func.setSalario(salario);
                 break;
-            default:
+            case 6:
+                System.out.println("Nova data admissão: (formato dd/MM/yyyy)");
+                data = scanner.next();
+                func.setDtAdmissao(data);
                 break;
+            case 7:
+                System.out.println("Nova data demissão: (formato dd/MM/yyyy)");
+                data = scanner.next();
+                func.setDtDemissao(data);
+                break;
+            case 8:
+                System.out.print("Nova senha: ");
+                String senha = scanner.next();
+                func.setSenha(senha);
+            break;
         }
         gerenciarFuncionario();
     }

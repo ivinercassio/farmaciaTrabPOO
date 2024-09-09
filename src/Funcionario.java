@@ -1,4 +1,3 @@
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -35,6 +34,11 @@ public abstract class Funcionario extends Pessoa {
         }
     }
 
+    protected void setSenha(String senha) {
+        if (senha != null && senha != "")
+            this.senha = senha;
+    }
+
     protected String getSenha() {
         return senha;
     }    
@@ -42,5 +46,27 @@ public abstract class Funcionario extends Pessoa {
     protected void setSalario(float salario) {
         if (salario > 0)
             this.salario = salario;
+    }
+
+    protected String getDtAdmissao() {
+        SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+        try {
+            return dateFormat.format(dtAdmissao);
+        } catch (Exception e) {
+            return "ERRO";
+        }
+    }
+
+    protected String getDtDemissao() {
+        SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+        try {
+            return dateFormat.format(dtDemissao);
+        } catch (Exception e) {
+            return "ERRO";
+        }
+    }
+
+    protected float getSalario() {
+        return salario;
     }
 }
